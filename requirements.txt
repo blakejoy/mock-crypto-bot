@@ -1,0 +1,14 @@
+Flask==0.12.2
+Jinja2==2.9.6
+MarkupSafe==1.0
+Werkzeug==0.12.2
+bittrex==0.1.4
+click==6.7
+itsdangerous==0.24
+pip==9.0.1
+python-bittrex==0.1.4
+requests==2.18.4
+setuptools==36.6.0
+wheel==0.30.0a0
+
+
