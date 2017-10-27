@@ -1,14 +1,18 @@
 from flask import Flask, jsonify, render_template, request
+from flask_firebase import FirebaseAuth
 from bittrex import Bittrex
 
 app = Flask(__name__)
-bit = Bittrex('e5b05612e299400ba26405c25549bbad','b3d4526a91fd4e81bb904ce6b6f4beae')
+app.config.from_object("config")
 
+bit = Bittrex('e5b05612e299400ba26405c25549bbad','b3d4526a91fd4e81bb904ce6b6f4beae')
+fbAuth = FirebaseAuth(app)
 
 @app.route('/')
 def home():
     markets = bit.get_markets()
-    return render_template('index.html',markets=markets['result'])
+    print(fbAuth.api_key)
+    return render_template('index.html', markets=markets['result'])
 
 @app.route('/markets')
 def markets(coin):
@@ -25,6 +29,7 @@ def search_markets():
 def ticker():
     ticker = bit.get_ticker('BTC-LTC')
     return jsonify(ticker)
+
 
 
 if __name__ == '__main__':

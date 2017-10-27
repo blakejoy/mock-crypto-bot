@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,11 +6,12 @@
     <link rel="stylesheet" href="./static/css/main.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
 </head>
 <body>
 
 <div class="container">
-change
 
 <header>
   <form action="{{ url_for('search_markets') }}" method="post">
@@ -34,29 +35,9 @@ change
 </nav>
 
 <div class="content">
-
-<table id="main-table">
-    <thead>
-    <th>Market Name</th>
-    <th>Base Name</th>
-    <th>Long Abbrev.</th>
-    <th>Short Abbrev.</th>
-    </thead>
-    <tbody>
-    {% for market in markets %}
-    <tr>
-        <td>{{market.MarketCurrencyLong}}</td>
-        <td>{{market.BaseCurrencyLong }}</td>
-        <td>{{  market.MarketCurrency}} </td>
-        <td>{{ market.BaseCurrency }}</td>
-    </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+{% block content %}{% endblock %}
 
 </div>
-
 
 </div>
 </body>
@@ -79,3 +60,6 @@ $(document).ready(function() {
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 </html>
+
+
+

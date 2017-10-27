@@ -10,5 +10,5 @@ python-bittrex==0.1.4
 requests==2.18.4
 setuptools==36.6.0
 wheel==0.30.0a0
-
+Flask-Firebase
 
