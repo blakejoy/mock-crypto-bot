@@ -1,0 +1,58 @@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+{% macro render_field(field, placeholder=None) %}
+{% if field.errors %}
+<div>
+{% elif field.flags.error %}
+<div>
+{% else %}
+<div>
+{% endif %}
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+</div>
+{% endmacro %}
+
+
+<div class="container">
+  <div>
+    <legend>Sign in</legend>
+    {% with errors = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div>
+    {% for category,message in messages %}
+    {{ message }}<br>
+    {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if form.errors %}
+    <div>
+    {% for field, error in form.errors.items() %}
+    {% for e in error %}
+    {{ e }}<br>
+    {% endfor %}
+    {% endfor %}
+    </div>
+    {% endif %}
+    <form method="POST" action="{{ url_for('auth.login') }}" accept-charset="UTF-8" role="form">
+      {{ form.csrf_token }}
+      {{ render_field(form.email, placeholder="Your Email Address",
+                                  autofocus="") }}
+      {{ render_field(form.password, placeholder="Password") }}
+
+
+
+      <div>
+      <label>
+        <input type="checkbox" name="remember" value="1"> Remember Me
+      </label>
+      <a role="button" href="">Forgot your password?</a><span class="clearfix"></span>
+      </div>
+      <button class="btn" type="submit" name="submit">Sign in</button>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-success" name="submit">Sign up</a>
+
+    </form>
+  </div>
+</div>
