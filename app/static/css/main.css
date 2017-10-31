@@ -1,21 +1,32 @@
-.content{
-    margin-left: 150px;
-}
-header{
-    margin-left: 150px;
+#wrapper{
+    width:100%;
 }
 
+#content-wrapper{
+    padding: 0 15px;
+    min-height: 568px;
+    background-color: white;
+    margin: 0 50px 0 225px;
+}
+
+.logo{
+    margin: 15px 0 0 50px;
+    float:left;
+}
+
+.navbar-right{
+margin-right: 10px!important;
+}
 
 .sidebar{
-  height: 100%;
+    margin-top: 57px;
   width: 200px;
-  position: fixed;
+    height: 500px;
+  position: absolute;
   z-index: 1;
   top: 0;
-  left: 0;
-  background-color: #0c692c;
-  overflow-x: hidden;
-  padding-top: 20px;
+  background-color: #0c692c!important;
+
 
 }
 
@@ -29,3 +40,6 @@ header{
     padding-left: 50px;
 }
 
+#market-search{
+    margin: 10px 0 0 225px;
+}

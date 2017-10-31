@@ -37,7 +37,7 @@ def login():
 
             return redirect(url_for('home'))
 
-        flash('Incorrect email or password', 'error-message')
+        flash('Incorrect email or password', 'error')
 
     return render_template("auth/login.html", form=form)
 
@@ -61,7 +61,7 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    return Response('<p>Logged out</p>')
+    return redirect(url_for('auth.login'))
 
 
 
