@@ -10,36 +10,38 @@
 }
 
 .logo{
-    margin: 15px 0 0 50px;
+    margin: 10px 0 0 50px;
+    width: 100px;
     float:left;
+}
+
+.navbar-default{
+    background-color: #0c692c!important;
 }
 
 .navbar-right{
 margin-right: 10px!important;
+    margin-top: 30px!important;
 }
 
 .sidebar{
-    margin-top: 57px;
+    margin-top: 84px;
   width: 200px;
     height: 500px;
   position: absolute;
   z-index: 1;
   top: 0;
   background-color: #0c692c!important;
-
-
 }
 
-.sidebar ul{
-    list-style: none;
+.sidebar-nav{
+    padding-top: 10px;
+    font-size: 18px;
+    color:white;
 }
 
-.sidebar-header a{
-    color: white;
-    text-align: center;
-    padding-left: 50px;
-}
+
 
 #market-search{
-    margin: 10px 0 0 225px;
+    margin: 30px 0 0 225px;
 }
