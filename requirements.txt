@@ -11,4 +11,6 @@ requests==2.18.4
 setuptools==36.6.0
 wheel==0.30.0a0
 Flask-Firebase
-
+flask-login
+flask-sqlalchemy
+flask-wtf
