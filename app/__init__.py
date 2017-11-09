@@ -41,13 +41,13 @@ def unauthorized():
     return redirect(url_for('auth.login'))
 
 
-#TODO: Make seperate file for root routes
+
+
 @app.route('/')
 @login_required
 def home():
     markets = bit.get_markets()
     return render_template('index.html', markets=markets['result'])
-
 
 @app.route('/markets/search',methods=['POST'])
 def search_markets():
@@ -61,11 +61,11 @@ def search_markets():
 #import module
 from app.modules.auth.controllers import auth_module
 
-
+from app.modules.trade.controllers import trade_module
 
 # register blueprint
 app.register_blueprint(auth_module)
-
+app.register_blueprint(trade_module)
 
 
 db.create_all()

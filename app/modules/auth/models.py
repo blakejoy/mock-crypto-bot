@@ -18,16 +18,18 @@ class User(Base):
     __tablename__ = 'user'
 
     # User Name
-    name    = db.Column(db.String(128),  nullable=False)
+    name    = db.Column(db.String(128),  nullable=False,
+                        unique=True)
 
     # Identification Data: email & password
     email    = db.Column(db.String(128),  nullable=False,
                                             unique=True)
     password = db.Column(db.String(192),  nullable=False)
 
-    # Authorisation Data: role & status
+    # Authorization Data: role & status
     role     = db.Column(db.SmallInteger, nullable=False)
     status   = db.Column(db.SmallInteger, nullable=False)
+    first_login = db.Column(db.SmallInteger, nullable=False)
 
     # New instance instantiation procedure
     def __init__(self, name, email, password):
@@ -37,6 +39,7 @@ class User(Base):
         self.password = password
         self.role = 0
         self.status = 1
+        self.first_login = 0
 
     def __repr__(self):
         return '<User %r>' % (self.name)
