@@ -1,17 +1,14 @@
 # Import flask dependencies
 from flask import Blueprint, request, render_template, \
-    flash, g, session, redirect, url_for, Response
-
+    flash, redirect, url_for
 # Import the database object from the main app module
 from flask_login import login_user, login_required, logout_user
 
-from app import db, bcrypt, app
-
+from app import bcrypt
+# Import module models (i.e. User)
+from app.models import User, Wallet
 # Import module forms
 from .forms import LoginForm, SignupForm
-
-# Import module models (i.e. User)
-from .models import User
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 auth_module = Blueprint('auth', __name__, url_prefix='/auth')
@@ -49,6 +46,12 @@ def signup():
     if request.method == 'POST' and form.validate_on_submit():
         user = User(form.username.data,form.email.data,form.password.data)
         user.password = bcrypt.generate_password_hash(user.password)
+
+        # TODO: Change how this is initialized. Im sure there is a cleaner way.
+        wallet = Wallet()
+        wallet.save_to_db()
+
+        user.wallet_id = wallet.account_number
         user.save_to_db()
         flash('Thanks for registering')
         return redirect(url_for('auth.login'))
