@@ -16,8 +16,11 @@
 {% endmacro %}
 
 <div class="container">
-  <div>
-    <legend>Sign in</legend>
+  <div style="
+    width: 400px;
+    margin: 0 auto;
+">
+    <legend>Sign Up</legend>
     {% with errors = get_flashed_messages(category_filter=["error"]) %}
     {% if errors %}
     <div>
