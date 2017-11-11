@@ -1,8 +1,11 @@
-from flask_login import LoginManager, login_required
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, jsonify, render_template, request, redirect, url_for
 from bittrex import Bittrex
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, login_required
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
+from flask_sqlalchemy import SQLAlchemy
+
 
 
 app = Flask(__name__)
@@ -20,6 +23,12 @@ bcrypt = Bcrypt(app)
 #initiate flask-login for user session management
 login_manager = LoginManager(app)
 
+# migration for db model changes
+migrate = Migrate(app,db)
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+
+
 
 #redirects to page not found error
 @app.errorhandler(404)
@@ -27,8 +36,8 @@ def not_found(error):
     return render_template('404.html'), 404
 
 
-#import user model
-from app.modules.auth.models import User
+#import all models
+from app.models import *
 
 #loads the user if user already logged in
 @login_manager.user_loader
@@ -41,13 +50,13 @@ def unauthorized():
     return redirect(url_for('auth.login'))
 
 
-#TODO: Make seperate file for root routes
+
+
 @app.route('/')
 @login_required
 def home():
     markets = bit.get_markets()
     return render_template('index.html', markets=markets['result'])
-
 
 @app.route('/markets/search',methods=['POST'])
 def search_markets():
@@ -61,11 +70,11 @@ def search_markets():
 #import module
 from app.modules.auth.controllers import auth_module
 
-
+from app.modules.trade.controllers import trade_module
 
 # register blueprint
 app.register_blueprint(auth_module)
+app.register_blueprint(trade_module)
 
 
 
-db.create_all()

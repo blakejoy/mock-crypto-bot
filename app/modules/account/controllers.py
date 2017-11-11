@@ -7,3 +7,4 @@ acct_module = Blueprint('account', __name__, url_prefix='/account')
 @login_required
 def accountInfo():
     return render_template('index.html')
+

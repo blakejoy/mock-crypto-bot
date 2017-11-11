@@ -5,18 +5,18 @@
     <div class="row">
     <table id="main-table">
     <thead>
+    <th>Base Currency Name</th>
+    <th>Base Currency Abbrev.</th>
     <th>Market Name</th>
-    <th>Base Name</th>
-    <th>Long Abbrev.</th>
-    <th>Short Abbrev.</th>
+    <th>Market Abbrev.</th>
     </thead>
     <tbody>
     {% for market in markets %}
     <tr>
-        <td>{{market.MarketCurrencyLong}}</td>
         <td>{{market.BaseCurrencyLong }}</td>
-        <td>{{market.MarketCurrency}} </td>
         <td>{{market.BaseCurrency }}</td>
+        <td>{{market.MarketCurrencyLong}}</td>
+        <td>{{market.MarketCurrency}} </td>
     </tr>
         {% endfor %}
     </tbody>
