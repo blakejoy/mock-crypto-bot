@@ -51,7 +51,6 @@
       </form>
     
         <br>
-    USD: $ {{ current_user.wallet.usd_balance }}
         <br>
         
 
@@ -65,25 +64,36 @@
                 <div class="form-group row">
 
                     <label for="inputKey" class="col-md-3 control-label">First Currency</label>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-3 currency">
                       
-                      <select class="form-control" id="sel1" name="first_currency">
+                      <select class="form-control" id="first_currency"  name="first_currency">
                         <option>USD</option>
                         <option>BTC</option>
                         <option>ETH</option>
                         <option>LTC</option>
                       </select>
+                        <div class="currency_stat">
+                            <div class="balance" style="display:none"></div>
+                            <br>
+                        <div class="curr_val" style="display:none"></div>
+                        </div>
+
+
                     </div>
 
                     
                     <label for="inputValue" class="col-md-3 control-label">Second Currency</label>
-                    <div class="form-group col-md-3">
-                      <select class="form-control" id="sel1" name="second_currency">
+                    <div class="form-group col-md-3 currency">
+                      <select class="form-control" id="second_currency" name="second_currency">
                         <option>USD</option>
                         <option>BTC</option>
                         <option>ETH</option>
                         <option>LTC</option>
                       </select>
+                        <div class="balance" style="display:none"></div>
+                        <br>
+                        <div class="curr_val" style="display:none"></div>
+
                     </div>
                 </div>
             </div>
@@ -227,22 +237,67 @@
     <!-- Bootstrap core JavaScript -->
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   <script type="application/javascript">
+
+    $(document).ready(function()
+    {
+
+        setInterval(function() {
+         }, 20000)
+
+            getAccountBalance('.currency')
+
+
+        });
+
+
+
+
+    $('.currency').change(function () {
+        var elem = $(this);
+        var currency = elem.find("select :selected").text();
+         $.post("{{ url_for('trade.check_acct_balance') }}", {
+             currency: currency
+         },
+             function(data){
+             elem.find('.balance').text("Your Wallet Balance: " + data);
+             elem.find('.balance').css('display','inline');
+        });
+
+         if (currency == 'USD'){
+             elem.find('.curr_val').css('display','none');
+         }else{
+            $.get("{{ url_for('trade.get_current_price')}}",
+            {market: currency},
+            function(data){
+                    elem.find('.curr_val').text("Latest " + currency +" Price: " + data);
+                    elem.find('.curr_val').css('display','inline');
+        });
+         }
+
+
+    });
+
+
 
           $('#start').click(function(){
               $('#bot-panel').collapse('show');
-             $.post("{{ url_for('trade.start_bot') }}", function(data){
+              $.post("{{ url_for('trade.ping') }}", {
+                 time_delay: $("input[name=time_delay]").val(),
+                 on_fail_delay: $("input[name=fail_delay]").val()
+                 },
+                 function(data){
 
              });
-             $.get("{{ url_for('trade.start_bot') }}", function(data){
 
-             });
           });
 
           $('#stop').click(function(){
               $('#bot-panel').collapse('hide');
           });
+
+
 
   </script>
 
