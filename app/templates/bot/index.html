@@ -72,12 +72,12 @@
                         <option>ETH</option>
                         <option>LTC</option>
                       </select>
+
                         <div class="currency_stat">
                             <div class="balance" style="display:none"></div>
                             <br>
                         <div class="curr_val" style="display:none"></div>
                         </div>
-
 
                     </div>
 
@@ -108,6 +108,9 @@
             </select>
           </div>
       </form>
+        <div>
+
+        </div>
 
       <!--*******DIVISION*********-->
 
@@ -177,12 +180,12 @@
 
                     <label for="inputKey" class="col-md-3 control-label">Percent Low Bollinger Band</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="20" name="low_band">
+                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="20" id="low_band">
                       
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Percent High Bollinger Band</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="20" name="high_band">
+                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="20" id="high_band">
                 </div>
             </div>
           </div>
@@ -217,7 +220,6 @@
 
 <div id="bot-panel" class="collapse" >
  <div class="card card-block">
-     Help this do something
   </div>
 </div>
 
@@ -243,9 +245,6 @@
     $(document).ready(function()
     {
 
-        setInterval(function() {
-         }, 20000)
-
             getAccountBalance('.currency')
 
 
@@ -257,7 +256,7 @@
     $('.currency').change(function () {
         var elem = $(this);
         var currency = elem.find("select :selected").text();
-         $.post("{{ url_for('trade.check_acct_balance') }}", {
+         $.post("{{ url_for('bot.check_acct_balance') }}", {
              currency: currency
          },
              function(data){
@@ -268,7 +267,7 @@
          if (currency == 'USD'){
              elem.find('.curr_val').css('display','none');
          }else{
-            $.get("{{ url_for('trade.get_current_price')}}",
+            $.get("{{ url_for('bot.get_current_price')}}",
             {market: currency},
             function(data){
                     elem.find('.curr_val').text("Latest " + currency +" Price: " + data);
@@ -281,11 +280,18 @@
 
 
 
+
+
           $('#start').click(function(){
               $('#bot-panel').collapse('show');
-              $.post("{{ url_for('trade.ping') }}", {
+              $('.card').append('Bot started!<br>');
+              $.post("{{ url_for('bot.start') }}", {
                  time_delay: $("input[name=time_delay]").val(),
-                 on_fail_delay: $("input[name=fail_delay]").val()
+                 on_fail_delay: $("input[name=fail_delay]").val(),
+                  first_currency: $('#first_currency').val(),
+                  second_currency: $('#second_currency').val(),
+                  high_band: $('#high_band').val(),
+                  low_band: $('#low_band').val()
                  },
                  function(data){
 

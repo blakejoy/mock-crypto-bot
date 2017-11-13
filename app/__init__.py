@@ -70,11 +70,11 @@ def search_markets():
 #import module
 from app.modules.auth.controllers import auth_module
 
-from app.modules.trade.controllers import trade_module
+from app.modules.bot.controllers import bot_module
 
 # register blueprint
 app.register_blueprint(auth_module)
-app.register_blueprint(trade_module)
+app.register_blueprint(bot_module)
 
 
 
