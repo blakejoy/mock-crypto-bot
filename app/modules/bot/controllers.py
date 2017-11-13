@@ -20,10 +20,21 @@ def new_trade():
 
 
 
+#TODO: Implement gain strategy
+
 @bot_module.route('/start',methods=['POST'])
 def start():
+    """
+    Returns the data of the market based on the strategy that is chosen.
+    This function initializes the bot
+
+    :rtype: dict
+    :return: the ask price of market and the high and low band percentages
+    """
     first_currency = request.form.get('first_currency')
     second_currency = request.form.get('second_currency')
+    buy_strategy =  request.form.get('buy_strat')
+    sell_strategy = request.form.get('sell_strat')
 
     if first_currency == 'USD':
         first_currency = 'USDT'
@@ -33,9 +44,24 @@ def start():
 
     market = first_currency + '-' + second_currency
 
-    #band_limit = bollinger_bands(market,request.form.get('high_band'),request.form.get('low_band'))
+    if buy_strategy == 'Bollinger Bands':
+        band_limit = bollinger_bands(market,request.form.get('high_band'),request.form.get('low_band'))
 
-    return Response()
+
+
+    ticker = bit.get_ticker('USDT-BTC')
+
+    json = {'band_limit': band_limit,'ask': ticker['result']['Ask']}
+
+    #TODO: Perform check for values
+    # if  json['ask'] >= json['band_limit']['high']:
+    #     return 'sell'
+    # elif json['ask'] <= json['band_limit']['low']:
+    #     return 'buy'
+    # else:
+    #     return 'keep running bot'
+
+    return jsonify(json)
 
 
 @bot_module.route('/check-balance',methods=['POST'])
@@ -72,7 +98,7 @@ def get_current_price():
 
         return Response(latest_price)
 
-
+#TODO: Check math for this strategy
 def bollinger_bands(market,high,low):
     """""
     Used to get bollinger bands high and low percentages.

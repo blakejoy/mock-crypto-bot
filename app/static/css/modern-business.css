@@ -27,3 +27,10 @@ body {
 .portfolio-item {
   margin-bottom: 30px;
 }
+
+
+.card{
+    max-height: 180px;
+    overflow-y: scroll;
+
+}

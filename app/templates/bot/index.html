@@ -124,7 +124,7 @@
                     <label for="inputKey" class="col-md-3 control-label">Buy Strategy</label>
                     <div class="form-group col-md-3">
                       
-                      <select class="form-control" id="sel1" name="buy_strat">
+                      <select class="form-control" id="buy_strat" name="buy_strat">
                         <option>Bollinger Bands</option>
                         <option>Ping Pong</option>
                         <option>1000 Trades</option>
@@ -133,7 +133,7 @@
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Sell Strategy</label>
                     <div class="form-group col-md-3">
-                      <select class="form-control" id="sel1" name="sell_strat">
+                      <select class="form-control" id="sell_strat" name="sell_strat">
                         <option>Bollinger Bands</option>
                         <option>Ping Pong</option>
                         <option>1000 Trades</option>
@@ -219,7 +219,7 @@
 
 
 <div id="bot-panel" class="collapse" >
- <div class="card card-block">
+ <div class="card card-block ">
   </div>
 </div>
 
@@ -282,22 +282,29 @@
 
 
 
-          $('#start').click(function(){
-              $('#bot-panel').collapse('show');
-              $('.card').append('Bot started!<br>');
-              $.post("{{ url_for('bot.start') }}", {
-                 time_delay: $("input[name=time_delay]").val(),
-                 on_fail_delay: $("input[name=fail_delay]").val(),
-                  first_currency: $('#first_currency').val(),
-                  second_currency: $('#second_currency').val(),
-                  high_band: $('#high_band').val(),
-                  low_band: $('#low_band').val()
-                 },
-                 function(data){
+    $('#start').click(function(){
+        $('#bot-panel').collapse('show');
+        $('.card').append('Bot started!<br>');
+        setInterval(function(){
+            $.post("{{ url_for('bot.start') }}", {
+                    buy_strat: $("#buy_strat").val(),
+                    sell_strat: $("#sell_strat").val(),
+                    time_delay: $("input[name=time_delay]").val(),
+                    on_fail_delay: $("input[name=fail_delay]").val(),
+                    first_currency: $('#first_currency').val(),
+                    second_currency: $('#second_currency').val(),
+                    high_band: $('#high_band').val(),
+                    low_band: $('#low_band').val()
+                },
+                function(data){
+                    $('.card').append(JSON.stringify(data) + '<br>');
+                    $('.card').animate({
+                        scrollTop: $('.card')[0].scrollHeight}, 1000
+                    );
+                });
+        },5000);
 
-             });
-
-          });
+    });
 
           $('#stop').click(function(){
               $('#bot-panel').collapse('hide');
