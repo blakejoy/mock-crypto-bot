@@ -1,6 +1,5 @@
 import datetime
 import numpy
-
 from flask import Blueprint, render_template, request, g, Response, jsonify
 from flask_login import login_required, current_user
 
@@ -103,6 +102,9 @@ def bollinger_bands(market,high,low):
     """""
     Used to get bollinger bands high and low percentages.
 
+    :parm market: market
+    :type market: str
+
 	:param high: integer number for percent of high
 	:type high: int
 
@@ -115,12 +117,12 @@ def bollinger_bands(market,high,low):
 
     ticks = bit.get_ticks(market,'day')
 
-    #average of high and low for each day... 20 days from today
+    #average of high and low for each day
     for tick in ticks['result']:
         avg_price = (tick['H'] + tick['L']) / 2
         prices.append(avg_price)
 
-
+    #20 day period
     period_prices = prices[635:-1]
 
     sma = sum(period_prices)/20 #middle band
@@ -135,4 +137,5 @@ def bollinger_bands(market,high,low):
     low_price = lower_band - (lower_band * (int(low)/100))
 
     return {'high': high_price,'low': low_price}
+
 

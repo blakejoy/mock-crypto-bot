@@ -217,7 +217,6 @@
     <button class="btn btn-danger" id="stop" >Stop Bot</button>
 
 
-
 <div id="bot-panel" class="collapse" >
  <div class="card card-block ">
   </div>
@@ -285,7 +284,7 @@
     $('#start').click(function(){
         $('#bot-panel').collapse('show');
         $('.card').append('Bot started!<br>');
-        setInterval(function(){
+         timedEvent = setInterval(function(){
             $.post("{{ url_for('bot.start') }}", {
                     buy_strat: $("#buy_strat").val(),
                     sell_strat: $("#sell_strat").val(),
@@ -302,12 +301,14 @@
                         scrollTop: $('.card')[0].scrollHeight}, 1000
                     );
                 });
-        },5000);
+        },10000);
 
     });
 
           $('#stop').click(function(){
               $('#bot-panel').collapse('hide');
+              clearInterval(timedEvent);
+              $('.card').empty();
           });
 
 
