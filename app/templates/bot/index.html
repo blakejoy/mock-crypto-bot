@@ -98,6 +98,22 @@
                 </div>
             </div>
           </div>
+
+
+          <div class="form-group ">
+              <div class="col-xs-4">
+                  <div class="form-group row">
+
+                      <label for="inputKey" class="col-md-3 control-label currency_amount">Amount </label>
+                      <div class="form-group col-md-3">
+                          <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                                 placeholder="20">
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+
           <div class="form-group col-xs-4">
             <label for="sel1">Select Market:</label>
             <select class="form-control" id="sel1" name="market">
@@ -123,7 +139,7 @@
 
                     <label for="inputKey" class="col-md-3 control-label">Buy Strategy</label>
                     <div class="form-group col-md-3">
-                      
+
                       <select class="form-control" id="buy_strat" name="buy_strat">
                         <option>Bollinger Bands</option>
                         <option>Ping Pong</option>
@@ -143,7 +159,7 @@
                 </div>
             </div>
           </div>
-          
+
       </form>
 
 
@@ -157,17 +173,17 @@
                     <label for="inputKey" class="col-md-3 control-label" data-toggle="tooltip" title="What percentage should be lost before you sell what you bought?">Sell Level</label>
                     <div class="form-group col-md-3">
                       <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="3" name="sell_lvl">
-                      
+
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Buy Level</label>
                     <div class="form-group col-md-3">
                       <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="3" name="buy_lvl">
-                      
+
                     </div>
                 </div>
             </div>
           </div>
-          
+
       </form>
 
 
@@ -181,7 +197,7 @@
                     <label for="inputKey" class="col-md-3 control-label">Percent Low Bollinger Band</label>
                     <div class="form-group col-md-3">
                       <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="20" id="low_band">
-                      
+
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Percent High Bollinger Band</label>
                     <div class="form-group col-md-3">
@@ -202,7 +218,7 @@
                     <label for="inputKey" class="col-md-3 control-label" data-toggle="tooltip" title="Amount of currency you want to use for each trade">Time Delay Price</label>
                     <div class="form-group col-md-3">
                       <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="60" name="time_delay">
-                      
+
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Bot on fail Delay</label>
                     <div class="form-group col-md-3">
@@ -217,7 +233,7 @@
     <button class="btn btn-danger" id="stop" >Stop Bot</button>
 
 
-<div id="bot-panel" class="collapse" >
+        <div id="bot-panel" class="collapse" >
  <div class="card card-block ">
   </div>
 </div>
@@ -226,7 +242,6 @@
     </div>
 
 
-      
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
@@ -239,18 +254,24 @@
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  <script type="application/javascript">
+
+    <script>
+       $(document).ready(function(){
+         $("#sel1").click(function(){
+          var v = $("#sel1").val();
+          $(".currency_amount").text("Amount in " + v);
+          });
+      });
+
+
+    </script>
+
+    <script type="application/javascript">
 
     $(document).ready(function()
     {
-
-            getAccountBalance('.currency')
-
-
-        });
-
-
-
+        getAccountBalance('.currency')
+    });
 
     $('.currency').change(function () {
         var elem = $(this);
@@ -273,18 +294,12 @@
                     elem.find('.curr_val').css('display','inline');
         });
          }
-
-
     });
-
-
-
-
 
     $('#start').click(function(){
         $('#bot-panel').collapse('show');
         $('.card').append('Bot started!<br>');
-         timedEvent = setInterval(function(){
+        setInterval(function(){
             $.post("{{ url_for('bot.start') }}", {
                     buy_strat: $("#buy_strat").val(),
                     sell_strat: $("#sell_strat").val(),
@@ -301,15 +316,13 @@
                         scrollTop: $('.card')[0].scrollHeight}, 1000
                     );
                 });
-        },10000);
+        },5000);
 
     });
 
-          $('#stop').click(function(){
-              $('#bot-panel').collapse('hide');
-              clearInterval(timedEvent);
-              $('.card').empty();
-          });
+  $('#stop').click(function(){
+      $('#bot-panel').collapse('hide');
+  });
 
 
 
