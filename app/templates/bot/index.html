@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 
 
-<!-- TO DO 
-  1. How much money are we using?
-
  <html lang="en">
 
   <head>
 
     <meta charset="utf-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -16,28 +14,37 @@
     <title>BitBot</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+      <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='css/modern-business.css') }}" rel="stylesheet">
+      <link href="css/modern-business.css" rel="stylesheet">
+
+      <link href="https://fonts.googleapis.com/css?family=Roboto:500" rel="stylesheet">
+      <style>
+      body {
+        padding-top: 54px;
+        font-family: 'Roboto', sans-serif;
+      }
+
+      </style>
 
   </head>
 
   <body>
     <div class="container-fluid">
       <div class="row">
-        
+
       </div>
     </div>
     <!-- Navigation -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="/">BitBot</a>
+          <a class="navbar-brand" href="index.html">BitBot</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-          
+
         </div>
       </div>
     </nav>
@@ -49,10 +56,7 @@
               <h1 class="m-0 text-center "> Bitbot Tester </h1>
           </div>
       </form>
-    
-        <br>
-        <br>
-        
+
 
     <!-- Page Content -->
     <div class="container">
@@ -64,41 +68,29 @@
                 <div class="form-group row">
 
                     <label for="inputKey" class="col-md-3 control-label">First Currency</label>
-                    <div class="form-group col-md-3 currency">
-                      
-                      <select class="form-control" id="first_currency"  name="first_currency">
+                    <div class="form-group col-md-3">
+
+                        <select class="form-control" id="sel1">
                         <option>USD</option>
                         <option>BTC</option>
                         <option>ETH</option>
                         <option>LTC</option>
                       </select>
-
-                        <div class="currency_stat">
-                            <div class="balance" style="display:none"></div>
-                            <br>
-                        <div class="curr_val" style="display:none"></div>
-                        </div>
-
                     </div>
 
-                    
+
                     <label for="inputValue" class="col-md-3 control-label">Second Currency</label>
-                    <div class="form-group col-md-3 currency">
-                      <select class="form-control" id="second_currency" name="second_currency">
+                    <div class="form-group col-md-3">
+                        <select class="form-control" id="sel1">
                         <option>USD</option>
                         <option>BTC</option>
                         <option>ETH</option>
                         <option>LTC</option>
                       </select>
-                        <div class="balance" style="display:none"></div>
-                        <br>
-                        <div class="curr_val" style="display:none"></div>
-
                     </div>
                 </div>
             </div>
           </div>
-
 
           <div class="form-group ">
               <div class="col-xs-4">
@@ -114,9 +106,10 @@
               </div>
           </div>
 
+      </form>
           <div class="form-group col-xs-4">
             <label for="sel1">Select Market:</label>
-            <select class="form-control" id="sel1" name="market">
+              <select class="form-control" id="sel1">
               <option>Bittrex</option>
               <option>Poloniex</option>
               <option>Kraken</option>
@@ -124,13 +117,12 @@
             </select>
           </div>
       </form>
-        <div>
-
-        </div>
 
       <!--*******DIVISION*********-->
+        <hr>
 
-      <form class="form-horizontal" role="form">
+
+        <form class="form-horizontal" role="form">
         <div class="form-group">
         <h2> Strategy </h2>
 
@@ -140,7 +132,7 @@
                     <label for="inputKey" class="col-md-3 control-label">Buy Strategy</label>
                     <div class="form-group col-md-3">
 
-                      <select class="form-control" id="buy_strat" name="buy_strat">
+                        <select class="form-control" id="sel1">
                         <option>Bollinger Bands</option>
                         <option>Ping Pong</option>
                         <option>1000 Trades</option>
@@ -149,7 +141,7 @@
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Sell Strategy</label>
                     <div class="form-group col-md-3">
-                      <select class="form-control" id="sell_strat" name="sell_strat">
+                        <select class="form-control" id="sel1">
                         <option>Bollinger Bands</option>
                         <option>Ping Pong</option>
                         <option>1000 Trades</option>
@@ -162,6 +154,7 @@
 
       </form>
 
+        <hr>
 
       <form class="form-horizontal" role="form">
         <div class="form-group">
@@ -172,12 +165,14 @@
 
                     <label for="inputKey" class="col-md-3 control-label" data-toggle="tooltip" title="What percentage should be lost before you sell what you bought?">Sell Level</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="3" name="sell_lvl">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                               placeholder="3">
 
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Buy Level</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="3" name="buy_lvl">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                               placeholder="3">
 
                     </div>
                 </div>
@@ -186,7 +181,7 @@
 
       </form>
 
-
+        <hr>
       <form class="form-horizontal" role="form">
         <div class="form-group">
         <h2> Bollinger Band Strategy </h2>
@@ -196,19 +191,23 @@
 
                     <label for="inputKey" class="col-md-3 control-label">Percent Low Bollinger Band</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="20" id="low_band">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                               placeholder="20">
 
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Percent High Bollinger Band</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="20" id="high_band">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                               placeholder="20">
                 </div>
             </div>
           </div>
-        </div>
+
       </form>
 
-      <form class="form-horizontal" role="form">
+        <hr>
+
+        <form class="form-horizontal" role="form">
         <div class="form-group">
         <h2> Bot Timing </h2>
 
@@ -217,26 +216,24 @@
 
                     <label for="inputKey" class="col-md-3 control-label" data-toggle="tooltip" title="Amount of currency you want to use for each trade">Time Delay Price</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="60" name="time_delay">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                               placeholder="60">
 
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Bot on fail Delay</label>
                     <div class="form-group col-md-3">
-                      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="30" name="fail_delay">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
+                               placeholder="30">
                 </div>
             </div>
           </div>
-        </div>
-      </form>
 
-    <button  class="btn btn-primary" id="start" >Start Bot</button>
-    <button class="btn btn-danger" id="stop" >Stop Bot</button>
+        </form>
 
+        <hr>
+        <button type="button" class="btn btn-primary">Start Bot</button>
+        <button type="button" class="btn btn-danger">Stop Bot</button>
 
-        <div id="bot-panel" class="collapse" >
- <div class="card card-block ">
-  </div>
-</div>
 
 
     </div>
@@ -251,9 +248,8 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script>
        $(document).ready(function(){
@@ -265,68 +261,6 @@
 
 
     </script>
-
-    <script type="application/javascript">
-
-    $(document).ready(function()
-    {
-        getAccountBalance('.currency')
-    });
-
-    $('.currency').change(function () {
-        var elem = $(this);
-        var currency = elem.find("select :selected").text();
-         $.post("{{ url_for('bot.check_acct_balance') }}", {
-             currency: currency
-         },
-             function(data){
-             elem.find('.balance').text("Your Wallet Balance: " + data);
-             elem.find('.balance').css('display','inline');
-        });
-
-         if (currency == 'USD'){
-             elem.find('.curr_val').css('display','none');
-         }else{
-            $.get("{{ url_for('bot.get_current_price')}}",
-            {market: currency},
-            function(data){
-                    elem.find('.curr_val').text("Latest " + currency +" Price: " + data);
-                    elem.find('.curr_val').css('display','inline');
-        });
-         }
-    });
-
-    $('#start').click(function(){
-        $('#bot-panel').collapse('show');
-        $('.card').append('Bot started!<br>');
-        setInterval(function(){
-            $.post("{{ url_for('bot.start') }}", {
-                    buy_strat: $("#buy_strat").val(),
-                    sell_strat: $("#sell_strat").val(),
-                    time_delay: $("input[name=time_delay]").val(),
-                    on_fail_delay: $("input[name=fail_delay]").val(),
-                    first_currency: $('#first_currency').val(),
-                    second_currency: $('#second_currency').val(),
-                    high_band: $('#high_band').val(),
-                    low_band: $('#low_band').val()
-                },
-                function(data){
-                    $('.card').append(JSON.stringify(data) + '<br>');
-                    $('.card').animate({
-                        scrollTop: $('.card')[0].scrollHeight}, 1000
-                    );
-                });
-        },5000);
-
-    });
-
-  $('#stop').click(function(){
-      $('#bot-panel').collapse('hide');
-  });
-
-
-
-  </script>
 
   </body>
 
