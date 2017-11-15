@@ -109,7 +109,7 @@
       </form>
           <div class="form-group col-xs-4">
             <label for="sel1">Select Market:</label>
-              <select class="form-control" id="sel1">
+              <select class="form-control" id="#sel2">
               <option>Bittrex</option>
               <option>Poloniex</option>
               <option>Kraken</option>
@@ -132,7 +132,8 @@
                     <label for="inputKey" class="col-md-3 control-label">Buy Strategy</label>
                     <div class="form-group col-md-3">
 
-                        <select class="form-control" id="sel1">
+                        <select class="form-control" id="#sel3">
+                            <option>Simple Gain</option>
                         <option>Bollinger Bands</option>
                         <option>Ping Pong</option>
                         <option>1000 Trades</option>
@@ -141,7 +142,8 @@
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Sell Strategy</label>
                     <div class="form-group col-md-3">
-                        <select class="form-control" id="sel1">
+                        <select class="form-control" id="#sel3">
+                            <option>Simple Gain</option>
                         <option>Bollinger Bands</option>
                         <option>Ping Pong</option>
                         <option>1000 Trades</option>
@@ -158,7 +160,7 @@
 
       <form class="form-horizontal" role="form">
         <div class="form-group">
-        <h2> Gain Strategy Settings </h2>
+            <h2> Simple Gain Strategy Settings </h2>
 
             <div class="col-xs-4">
                 <div class="form-group row">
@@ -166,13 +168,13 @@
                     <label for="inputKey" class="col-md-3 control-label" data-toggle="tooltip" title="What percentage should be lost before you sell what you bought?">Sell Level</label>
                     <div class="form-group col-md-3">
                         <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
-                               placeholder="3">
+                               placeholder="1.01">
 
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Buy Level</label>
                     <div class="form-group col-md-3">
                         <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
-                               placeholder="3">
+                               placeholder=".99">
 
                     </div>
                 </div>
