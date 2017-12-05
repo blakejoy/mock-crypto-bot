@@ -1,10 +1,8 @@
 import datetime
-import numpy
 from flask import Blueprint, render_template, request, g, Response, jsonify
 from flask_login import login_required, current_user
 
 from app import bit
-from app.modules.trade.controllers import convert_currency
 
 bot_module = Blueprint('bot', __name__, url_prefix='/bot')
 
@@ -43,13 +41,19 @@ def start():
 
     market = first_currency + '-' + second_currency
 
+    ticker = bit.get_ticker(market)
+
+
+
     if buy_strategy == 'Bollinger Bands':
         band_limit = bollinger_bands(market,request.form.get('high_band'),request.form.get('low_band'))
+    elif buy_strategy == 'Simple Gain':
+        start_price = ticker['result']['Ask']
+        sell_level = request.form.get('sell_lvl')
+        buy_level = request.form.get('buy_lvl')
+        percent_change(market,start_price,sell_level,buy_level)
 
-
-
-    ticker = bit.get_ticker('USDT-BTC')
-
+    #TODO:add
     json = {'band_limit': band_limit,'ask': ticker['result']['Ask']}
 
     #TODO: Perform check for values
@@ -61,6 +65,15 @@ def start():
     #     return 'keep running bot'
 
     return jsonify(json)
+
+
+@bot_module.route('/trade-history')
+def trade_history():
+    return Response('help')
+
+@bot_module.route('/run',methods=['POST'])
+def run():
+    return Response('help')
 
 
 @bot_module.route('/check-balance',methods=['POST'])
@@ -97,6 +110,7 @@ def get_current_price():
 
         return Response(latest_price)
 
+
 #TODO: Check math for this strategy
 def bollinger_bands(market,high,low):
     """""
@@ -123,7 +137,7 @@ def bollinger_bands(market,high,low):
         prices.append(avg_price)
 
     #20 day period
-    period_prices = prices[635:-1]
+    period_prices = prices[-21:-1]
 
     sma = sum(period_prices)/20 #middle band
 
@@ -139,3 +153,10 @@ def bollinger_bands(market,high,low):
     return {'high': high_price,'low': low_price}
 
 
+def percent_change(market,start_price,sell_lvl,buy_lvl):
+    current_price = bit.get_ticker(market)['result']['Ask']
+
+    if current_price <= buy_lvl * start_price:
+        current_user
+
+    print(current_price)

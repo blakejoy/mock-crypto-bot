@@ -36,9 +36,7 @@
         <div class="sidebar-nav">
             <ul class="fa-ul">
                 <li><i class="fa-li fa fa-share"></i><a href="{{ url_for('bot.new_trade') }}">New Trade</a></li>
-                <li><i class="fa-li fa fa-shopping-cart"></i>Buy</li>
-                <li><i class="fa-li fa fa-tags"></i>Sell</li>
-                <li><i class="fa-li fa fa-line-chart"></i>Trade History</li>
+                <li><i class="fa-li fa fa-line-chart"></i><a href="{{ url_for('bot.trade_history') }}">Trade History</a></li>
             </ul>
         </div>
     </div>

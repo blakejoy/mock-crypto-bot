@@ -14,14 +14,15 @@
     <title>BitBot</title>
 
     <!-- Bootstrap core CSS -->
-      <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-      <link href="css/modern-business.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/modern-business.css') }}" rel="stylesheet">
 
       <link href="https://fonts.googleapis.com/css?family=Roboto:500" rel="stylesheet">
 
-      <link href="js/intro.js-2.7.0/introjs.css" rel="stylesheet">
+      <link href="{{ url_for('static', filename='css/introjs.css') }}" rel="stylesheet">
+
 
       <style>
       body {
@@ -250,8 +251,9 @@
 
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}" >
+    <link href="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}">
+
 
     <script>
        $(document).ready(function(){
@@ -263,7 +265,8 @@
 
     </script>
 
-    <script type="text/javascript" src="js/intro.js-2.7.0/intro.js"></script>
+    <link href="{{ url_for('static', filename='vendor/intro.js-2.7.0/intro.js') }}">
+
 
   </body>
 
