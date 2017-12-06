@@ -57,11 +57,12 @@ def start():
     market = first_currency + '-' + second_currency
     ticker = bit.get_ticker(market)
 
+
     if buy_strategy == 'Bollinger Bands':
         band_limit = bollinger_bands(market,request.form.get('high_band'),request.form.get('low_band'))
         json = {'band_limit': band_limit,'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
     if buy_strategy == 'Percent Gain':
-        percents = percent_change(market, request.form.get('Buy_Level'), request.form.get('Sell_Level'))
+        percents = percent_change(market, request.form.get('gain_buy_level'), request.form.get('gain_sell_level'))
         json = {'band_limit': band_limit, 'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
 
 
