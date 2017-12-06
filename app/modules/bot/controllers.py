@@ -1,5 +1,4 @@
 import datetime
-import numpy
 from flask import Blueprint, render_template, request, g, Response, jsonify
 from flask_login import login_required, current_user
 
@@ -237,87 +236,85 @@ def percent_change(market, buy_level, sell_level):
 
     print("Initial Bitcoin Price: ", initialUSPrice)
 
-    for x in range(1, 100): 
-        cashInWallet = current_user.wallet.usd_balance
-        bitcoin = current_user.wallet.btc_balance
 
-        print("Loop #:", x)
+    cashInWallet = current_user.wallet.usd_balance
+    bitcoin = current_user.wallet.btc_balance
 
-        # Take quick break to see if price changed
-        time.sleep(5)
+    print("Loop #:", x)
 
-        # Grab current BTC US dollar price to see if it's changed
-        result = bit.get_ticker('BTC-' + request.args.get('market'))
-        latest_price = format(result['result']['Last'], '.2f')
-        btc_price_json = get_current_price('USD')
-        btc_price = btc_price_json['bpi']['USD']['rate_float']
-        btc_price = round(btc_price, 2)
-        print('Current bitcoin price is:', btc_price)
+    # Take quick break to see if price changed
+    time.sleep(5)
 
-        # Get Ask Price. Lowest price a trader is will to sell for at the moment
-        btc_ask_price = get_ticker('USDT-BTC')
-        btc_ask_price = btc_ask_price['result']['Ask']
-        print('ask price:', btc_ask_price)
+    # Grab current BTC US dollar price to see if it's changed
+    result = bit.get_ticker('BTC-' + request.args.get('market'))
+    latest_price = format(result['result']['Last'], '.2f')
+    btc_price_json = get_current_price('USD')
+    btc_price = btc_price_json['bpi']['USD']['rate_float']
+    btc_price = round(btc_price, 2)
+    print('Current bitcoin price is:', btc_price)
 
-        # Get Bid Price. Highest price a trader is willing to pay for the moment
-        btc_bid_price = get_ticker('USDT-BTC')
-        btc_bid_price = btc_bid_price['result']['Bid']
-        print('bid price:', btc_bid_price)
+    # Get Ask Price. Lowest price a trader is will to sell for at the moment
+    btc_ask_price = get_ticker('USDT-BTC')
+    btc_ask_price = btc_ask_price['result']['Ask']
+    print('ask price:', btc_ask_price)
 
-        # Set sell and buy price
-        sellPrice = round(initialUSPrice + (buy_level * initialUSPrice), 2)
-        buyPrice = round(initialUSPrice - (buy_level * initialUSPrice), 2)
-        print("bot buy price:", buyPrice)
-        print("bot sell price", sellPrice)
+    # Get Bid Price. Highest price a trader is willing to pay for the moment
+    btc_bid_price = get_ticker('USDT-BTC')
+    btc_bid_price = btc_bid_price['result']['Bid']
+    print('bid price:', btc_bid_price)
+
+    # Set sell and buy price
+    sellPrice = round(initialUSPrice + (buy_level * initialUSPrice), 2)
+    buyPrice = round(initialUSPrice - (buy_level * initialUSPrice), 2)
+    print("bot buy price:", buyPrice)
+    print("bot sell price", sellPrice)
+    print()
+
+    # Price is up by the set percent, but you have no bitcoins to sell...
+    if btc_price >= sellPrice and current_user.wallet.btc_balance == 0:
+        print("There are", current_user.wallet.btc_balance, "bitcoins in your wallet for sale. Coins will be purchased at",
+              buyPrice)
+
+    # Price is up by the set percent and We have bitcoins to sell!!!!
+    elif btc_price >= sellPrice and current_user.wallet.btc_balance > 0:
+        coins2DollarsAmount = btc2usd(current_user.wallet.btc_balance, btc_bid_price)
+        print('We can trade', current_user.wallet.btc_balance, 'bitcoins for', coins2DollarsAmount, 'dollars')
+
+        # Update Wallet with new amount
+        cashInWallet += coins2DollarsAmount
+        current_user.wallet.btc_balance = 0
+
+        # Set new Initial price value for U.S. Dollar value for bitcoin
+        initialUSPrice_json = get_current_price('USD')
+        initialUSPrice = initialUSPrice_json['bpi']['USD']['rate_float']
+        initialUSPrice = round(initialUSPrice, 2)
+        print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
         print()
 
-        # Price is up by the set percent, but you have no bitcoins to sell...
-        if btc_price >= sellPrice and current_user.wallet.btc_balance == 0:
-            print("There are", current_user.wallet.btc_balance, "bitcoins in your wallet for sale. Coins will be purchased at",
-                  buyPrice)
+    # Price is down by set percent but we have no cash to buy
+    elif btc_price <= buyPrice and cashInWallet == 0:
+        coins2DollarsAmount = btc2usd(current_user.wallet.btc_balance, btc_bid_price)
+        print("There are", cashInWallet,
+              "dollars in your wallet for a purchase. If coins are sold at current")
+        print("rate you can make", coins2DollarsAmount)
+        print()
 
-        # Price is up by the set percent and We have bitcoins to sell!!!!
-        elif btc_price >= sellPrice and current_user.wallet.btc_balance > 0:
-            coins2DollarsAmount = btc2usd(current_user.wallet.btc_balance, btc_bid_price)
-            print('We can trade', current_user.wallet.btc_balance, 'bitcoins for', coins2DollarsAmount, 'dollars')
+    # Price is down by set percent and we have cash to buy!!!!
+    elif btc_price <= buyPrice and cashInWallet > 0:
 
-            # Update Wallet with new amount
-            cashInWallet += coins2DollarsAmount
-            current_user.wallet.btc_balance = 0
+        # See how much we would get for our bitcoins at the current rate
+        bitcoinAmount = usd2btc(cashInWallet, btc_ask_price)
+        print('We can trade', cashInWallet / 4, 'dollars for', bitcoinAmount / 4, 'bitcoins')
 
-            # Set new Initial price value for U.S. Dollar value for bitcoin
-            initialUSPrice_json = get_current_price('USD')
-            initialUSPrice = initialUSPrice_json['bpi']['USD']['rate_float']
-            initialUSPrice = round(initialUSPrice, 2)
-            print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
-            print()
+        # Update Wallet with new amount
+        cashInWallet /= 4
+        current_user.wallet.btc_balance += usd2btc(cashInWallet / 4, btc_ask_price)
 
-        # Price is down by set percent but we have no cash to buy
-        elif btc_price <= buyPrice and cashInWallet == 0:
-            coins2DollarsAmount = btc2usd(current_user.wallet.btc_balance, btc_bid_price)
-            print("There are", cashInWallet,
-                  "dollars in your wallet for a purchase. If coins are sold at current")
-            print("rate you can make", coins2DollarsAmount)
-            print()
+        # Set new Initial price value for U.S. Dollar value for bitcoin
+        initialUSPrice_json = get_current_price('USD')
+        initialUSPrice = initialUSPrice_json['bpi']['USD']['rate_float']
+        initialUSPrice = round(initialUSPrice, 2)
+        print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
+        print()
 
-        # Price is down by set percent and we have cash to buy!!!!
-        elif btc_price <= buyPrice and cashInWallet > 0:
-
-            # See how much we would get for our bitcoins at the current rate
-            bitcoinAmount = usd2btc(cashInWallet, btc_ask_price)
-            print('We can trade', cashInWallet / 4, 'dollars for', bitcoinAmount / 4, 'bitcoins')
-
-            # Update Wallet with new amount
-            cashInWallet /= 4
-            current_user.wallet.btc_balance += usd2btc(cashInWallet / 4, btc_ask_price)
-
-            # Set new Initial price value for U.S. Dollar value for bitcoin
-            initialUSPrice_json = get_current_price('USD')
-            initialUSPrice = initialUSPrice_json['bpi']['USD']['rate_float']
-            initialUSPrice = round(initialUSPrice, 2)
-            print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
-            print()
-
-    return Response('hi')
-
-
+    return {'Cash': cashInWallet, 'BTC': bitcoin}
