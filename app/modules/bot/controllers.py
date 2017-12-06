@@ -87,7 +87,7 @@ def check_acct_balance():
     return jsonify(currencyDict)
 
 
-@bot_module.route('/current-price/<market>')
+@bot_module.route('/current-price')
 def get_current_price():
     market = request.args.get('market')
     if market == 'USDT':
