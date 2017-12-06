@@ -98,9 +98,6 @@ def check_acct_balance():
             balance = get_wallet_currency_balance(currency)
         else:
             balance = 0
-
-
-
     return jsonify(balance)
 
 
@@ -113,9 +110,7 @@ def get_current_price():
         # Get last price
         result = bit.get_ticker('USDT-' + request.args.get('market'))
         latest_price = format(result['result']['Last'],'.2f')
-
         return Response(latest_price)
-
 
 def get_wallet_currency_balance(currency):
     if currency == 'USD':
@@ -317,4 +312,5 @@ def percent_change(market, buy_level, sell_level):
         print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
         print()
 
-    return {'Cash': cashInWallet, 'BTC': bitcoin}
+    final_portfolio_value = cashInWallet + btc2usd(bitcoin, get_current_price('USD'))
+    return {'Cash': cashInWallet, 'BTC': bitcoin, 'Total Value(in USD)': final_portfolio_value}
