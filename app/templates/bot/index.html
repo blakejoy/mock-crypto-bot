@@ -114,8 +114,8 @@
 
                     <label for="inputKey" class="col-md-3 control-label currency_amount">Amount </label>
                     <div class="form-group col-md-3">
-                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
-                               name="currency_amount" placeholder="20">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0"
+                               id="currency_amount" placeholder="20">
 
                     </div>
                 </div>
@@ -149,7 +149,7 @@
                     <label for="inputKey" class="col-md-3 control-label">Buy Strategy</label>
                     <div class="form-group col-md-3">
 
-                        <select class="form-control" id="sel1" name="buy_strat">
+                        <select class="form-control" id="buy_strat">
                             <option>Bollinger Bands</option>
                             <option>Ping Pong</option>
                             <option>1000 Trades</option>
@@ -158,7 +158,7 @@
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Sell Strategy</label>
                     <div class="form-group col-md-3">
-                        <select class="form-control" id="sel1" name="sell_strat">
+                        <select class="form-control" id="sell_strat">
                             <option>Bollinger Bands</option>
                             <option>Ping Pong</option>
                             <option>1000 Trades</option>
@@ -207,14 +207,14 @@
 
                     <label for="inputKey" class="col-md-3 control-label">Percent Low Bollinger Band</label>
                     <div class="form-group col-md-3">
-                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
-                               placeholder="20">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0"
+                               placeholder="20" id="low_band">
 
                     </div>
                     <label for="inputValue" class="col-md-3 control-label">Percent High Bollinger Band</label>
                     <div class="form-group col-md-3">
-                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput"
-                               placeholder="20">
+                        <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0"
+                               placeholder="20" id="high_band">
                     </div>
                 </div>
             </div>
@@ -285,7 +285,7 @@
     $('.currency').change(function () {
         var elem = $(this);
         var currency = elem.find("select :selected").text();
-        $.post("{{ url_for('bot.check_acct_balance') }}", {
+        $.get("{{ url_for('bot.check_acct_balance') }}", {
                 currency: currency
             },
             function(data){
@@ -309,19 +309,31 @@
 
 
 
+$("#currency_amount").focusout(function () {
+    var currency = $('#first_currency').find(':selected').text();
+    var amount = $('#currency_amount').val();
 
+ $.post("{{ url_for('bot.check_acct_balance') }}", {
+                currency: currency,
+                amount: amount
+            },
+            function(data){
+
+            });
+});
 
     $('#start').click(function(){
         $('#bot-panel').collapse('show');
         $('.card').append('Bot started!<br>');
-        timedEvent = setInterval(function(){
-            $.post("{{ url_for('bot.start') }}", {
+
+         $.post("{{ url_for('bot.start') }}", {
                     buy_strat: $("#buy_strat").val(),
                     sell_strat: $("#sell_strat").val(),
                     time_delay: $("input[name=time_delay]").val(),
                     on_fail: $("input[name=fail_delay]").val(),
                     first_currency: $('#first_currency').val(),
                     second_currency: $('#second_currency').val(),
+                    amount: $('#amount').val(),
                     high_band: $('#high_band').val(),
                     low_band: $('#low_band').val()
                 },
@@ -330,8 +342,9 @@
                     $('.card').animate({
                         scrollTop: $('.card')[0].scrollHeight}, 1000
                     );
-                });
-        },10000);
+                }).done(function(data){
+
+         });
 
     });
 

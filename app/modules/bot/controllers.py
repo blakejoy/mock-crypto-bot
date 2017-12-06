@@ -36,6 +36,10 @@ def start():
     second_currency = request.form.get('second_currency')
     buy_strategy =  request.form.get('buy_strat')
     sell_strategy = request.form.get('sell_strat')
+    amount = request.form.get('amount')
+
+    current_balance = get_wallet_currency_balance(first_currency)
+
 
     if first_currency == 'USD':
         first_currency = 'USDT'
@@ -43,16 +47,21 @@ def start():
     if second_currency == 'USD':
         second_currency = 'USDT'
 
+
     market = first_currency + '-' + second_currency
+    ticker = bit.get_ticker(market)
 
     if buy_strategy == 'Bollinger Bands':
         band_limit = bollinger_bands(market,request.form.get('high_band'),request.form.get('low_band'))
 
 
+        json = {'band_limit': band_limit,'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
 
-    ticker = bit.get_ticker('USDT-BTC')
 
-    json = {'band_limit': band_limit,'ask': ticker['result']['Ask']}
+
+
+
+
 
     #TODO: Perform check for values
     # if  json['ask'] >= json['band_limit']['high']:
@@ -65,26 +74,21 @@ def start():
     return jsonify(json)
 
 
-@bot_module.route('/check-balance',methods=['POST'])
+@bot_module.route('/check-balance',methods=['GET','POST'])
 def check_acct_balance():
-    currency = request.form.get('currency')
-    currencyDict = []
+    currency = request.args.get('currency')
+
+    if request.method == "GET":
+        balance = get_wallet_currency_balance(currency)
+    else:
+        if float(request.args.get('amount')) > 0.0:
+            balance = get_wallet_currency_balance(currency)
+        else:
+            balance = 0
 
 
-    if currency == 'USD':
-        usd = format(current_user.wallet.usd_balance, '.2f')
-        currencyDict.append(usd)
-    elif currency == 'BTC':
-        btc = format(current_user.wallet.btc_balance, '.2f')
-        currencyDict.append(btc)
-    elif currency == 'LTC':
-        ltc = format(current_user.wallet.ltc_balance, '.2f')
-        currencyDict.append(ltc)
-    elif currency == 'ETH':
-        eth = format(current_user.wallet.eth_balance, '.2f')
-        currencyDict.append(eth)
 
-    return jsonify(currencyDict)
+    return jsonify(balance)
 
 
 @bot_module.route('/current-price')
@@ -99,7 +103,22 @@ def get_current_price():
 
         return Response(latest_price)
 
-#TODO: Check math for this strategy
+
+def get_wallet_currency_balance(currency):
+    if currency == 'USD':
+        amount = format(current_user.wallet.usd_balance, '.2f')
+    elif currency == 'BTC':
+        amount = format(current_user.wallet.btc_balance, '.2f')
+    elif currency == 'LTC':
+        amount = format(current_user.wallet.ltc_balance, '.2f')
+    elif currency == 'ETH':
+        amount = format(current_user.wallet.eth_balance, '.2f')
+
+
+    return amount
+
+
+
 def bollinger_bands(market,high,low):
     """""
     Used to get bollinger bands high and low percentages.
