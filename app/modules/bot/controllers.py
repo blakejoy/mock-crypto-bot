@@ -57,16 +57,20 @@ def start():
     market = first_currency + '-' + second_currency
     ticker = bit.get_ticker(market)
 
-
     if buy_strategy == 'Bollinger Bands':
         band_limit = bollinger_bands(market,request.form.get('high_band'),request.form.get('low_band'))
         json = {'band_limit': band_limit,'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
     if buy_strategy == 'Percent Gain':
         percents = percent_change(market, request.form.get('gain_buy_level'), request.form.get('gain_sell_level'))
-        json = {'band_limit': band_limit, 'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
+        json = {'percents': percents, 'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
 
 
-
+    if sell_strategy == 'Bollinger Bands':
+        band_limit = bollinger_bands(market,request.form.get('high_band'),request.form.get('low_band'))
+        json = {'band_limit': band_limit,'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
+    if sell_strategy == 'Percent Gain':
+        percents = percent_change(market, request.form.get('gain_buy_level'), request.form.get('gain_sell_level'))
+        json = {'percents': percents, 'ask': ticker['result']['Ask'], 'last_bid': ticker['result']['Bid']}
 
 
 
@@ -213,22 +217,23 @@ def bollinger_bands(market,high,low):
 
 
 def percent_change(market, buy_level, sell_level):
-    name = 'DeLander'
-    cashInWallet = 15000
-    bitcoin = .5
+
+    cashInWallet = current_user.wallet.usd_balance
+    bitcoin = current_user.wallet.btc_balance
 
     # Risk (high 90 %, med 40 %, low 10 %)
     risk = .9
 
     # Create crypto currency wallet to store in json
-    userWallet = {'Name': name, 'Cash': cashInWallet, 'BTC': bitcoin}
-    print('Wallet contains: NAME-', userWallet['Name'], 'CASH-', userWallet['Cash'], 'Bitcoin-', userWallet['BTC'])
+    print('Wallet contains: NAME-', current_user.name, 'CASH-', cashInWallet, 'Bitcoin-', bitcoin)
     print()
 
+
     # Get current U.S. Dollar value for bitcoin
-    initialUSPrice_json = get_current_price('USD')
-    initialUSPrice = initialUSPrice_json['bpi']['USD']['rate_float']
-    initialUSPrice = round(initialUSPrice, 2)
+
+    result = bit.get_ticker('USDT-' + request.args.get('market'))
+    latest_price = format(result['result']['Last'], '.2f')
+    initialUSPrice = round(latest_price, 2)
 
     print("Initial Bitcoin Price: ", initialUSPrice)
 
@@ -239,6 +244,8 @@ def percent_change(market, buy_level, sell_level):
         time.sleep(5)
 
         # Grab current BTC US dollar price to see if it's changed
+        result = bit.get_ticker('BTC-' + request.args.get('market'))
+        latest_price = format(result['result']['Last'], '.2f')
         btc_price_json = get_current_price('USD')
         btc_price = btc_price_json['bpi']['USD']['rate_float']
         btc_price = round(btc_price, 2)
