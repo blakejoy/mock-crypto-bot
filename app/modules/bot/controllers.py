@@ -237,7 +237,10 @@ def percent_change(market, buy_level, sell_level):
 
     print("Initial Bitcoin Price: ", initialUSPrice)
 
-    for x in range(1, 100):
+    for x in range(1, 100): 
+        cashInWallet = current_user.wallet.usd_balance
+        bitcoin = current_user.wallet.btc_balance
+
         print("Loop #:", x)
 
         # Take quick break to see if price changed
@@ -269,50 +272,52 @@ def percent_change(market, buy_level, sell_level):
         print()
 
         # Price is up by the set percent, but you have no bitcoins to sell...
-        if btc_price >= sellPrice and userWallet['BTC'] == 0:
-            print("There are", userWallet['BTC'], "bitcoins in your wallet for sale. Coins will be purchased at",
+        if btc_price >= sellPrice and current_user.wallet.btc_balance == 0:
+            print("There are", current_user.wallet.btc_balance, "bitcoins in your wallet for sale. Coins will be purchased at",
                   buyPrice)
 
         # Price is up by the set percent and We have bitcoins to sell!!!!
-        elif btc_price >= sellPrice and userWallet['BTC'] > 0:
-            coins2DollarsAmount = btc2usd(userWallet['BTC'], btc_bid_price)
-            print('We can trade', userWallet['BTC'], 'bitcoins for', coins2DollarsAmount, 'dollars')
+        elif btc_price >= sellPrice and current_user.wallet.btc_balance > 0:
+            coins2DollarsAmount = btc2usd(current_user.wallet.btc_balance, btc_bid_price)
+            print('We can trade', current_user.wallet.btc_balance, 'bitcoins for', coins2DollarsAmount, 'dollars')
 
             # Update Wallet with new amount
-            userWallet['Cash'] += coins2DollarsAmount
-            userWallet['BTC'] = 0
+            cashInWallet += coins2DollarsAmount
+            current_user.wallet.btc_balance = 0
 
             # Set new Initial price value for U.S. Dollar value for bitcoin
             initialUSPrice_json = get_current_price('USD')
             initialUSPrice = initialUSPrice_json['bpi']['USD']['rate_float']
             initialUSPrice = round(initialUSPrice, 2)
-            print('New wallet amount:', 'CASH-', userWallet['Cash'], 'Bitcoin', userWallet['BTC'])
+            print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
             print()
 
         # Price is down by set percent but we have no cash to buy
-        elif btc_price <= buyPrice and userWallet['Cash'] == 0:
-            coins2DollarsAmount = btc2usd(userWallet['BTC'], btc_bid_price)
-            print("There are", userWallet['Cash'],
+        elif btc_price <= buyPrice and cashInWallet == 0:
+            coins2DollarsAmount = btc2usd(current_user.wallet.btc_balance, btc_bid_price)
+            print("There are", cashInWallet,
                   "dollars in your wallet for a purchase. If coins are sold at current")
             print("rate you can make", coins2DollarsAmount)
             print()
 
         # Price is down by set percent and we have cash to buy!!!!
-        elif btc_price <= buyPrice and userWallet['Cash'] > 0:
+        elif btc_price <= buyPrice and cashInWallet > 0:
 
             # See how much we would get for our bitcoins at the current rate
-            bitcoinAmount = usd2btc(userWallet['Cash'], btc_ask_price)
-            print('We can trade', userWallet['Cash'] / 4, 'dollars for', bitcoinAmount / 4, 'bitcoins')
+            bitcoinAmount = usd2btc(cashInWallet, btc_ask_price)
+            print('We can trade', cashInWallet / 4, 'dollars for', bitcoinAmount / 4, 'bitcoins')
 
             # Update Wallet with new amount
-            userWallet['Cash'] /= 4
-            userWallet['BTC'] += usd2btc(userWallet['Cash'] / 4, btc_ask_price)
+            cashInWallet /= 4
+            current_user.wallet.btc_balance += usd2btc(cashInWallet / 4, btc_ask_price)
 
             # Set new Initial price value for U.S. Dollar value for bitcoin
             initialUSPrice_json = get_current_price('USD')
             initialUSPrice = initialUSPrice_json['bpi']['USD']['rate_float']
             initialUSPrice = round(initialUSPrice, 2)
-            print('New wallet amount:', 'CASH-', userWallet['Cash'], 'Bitcoin', userWallet['BTC'])
+            print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
             print()
 
     return Response('hi')
+
+
