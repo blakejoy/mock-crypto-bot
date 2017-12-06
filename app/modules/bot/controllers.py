@@ -87,7 +87,7 @@ def check_acct_balance():
     return jsonify(currencyDict)
 
 
-@bot_module.route('/current-price')
+@bot_module.route('/current-price/<market>')
 def get_current_price():
     market = request.args.get('market')
     if market == 'USDT':
@@ -142,3 +142,5 @@ def bollinger_bands(market,high,low):
     return {'high': high_price,'low': low_price}
 
 
+def percent_change():
+    return Response('hi')
