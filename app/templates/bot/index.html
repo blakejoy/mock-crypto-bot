@@ -323,7 +323,9 @@ $("#currency_amount").focusout(function () {
         $('#bot-panel').collapse('show');
         $('.card').append('Bot started!<br>');
 
-         $.post("{{ url_for('bot.start') }}", {
+        timedEvent = setInterval(function() {
+
+            $.post("{{ url_for('bot.start') }}", {
                     buy_strat: $("#buy_strat").val(),
                     sell_strat: $("#sell_strat").val(),
                     time_delay: $("input[name=time_delay]").val(),
@@ -336,14 +338,14 @@ $("#currency_amount").focusout(function () {
                     gain_buy_level: $('#Buy_Level').val(),
                     gain_sell_level: $('#Sell_Level').val()
                 },
-                function(data){
+                function (data) {
                     $('.card').append(JSON.stringify(data) + '<br>');
                     $('.card').animate({
-                        scrollTop: $('.card')[0].scrollHeight}, 1000
+                            scrollTop: $('.card')[0].scrollHeight
+                        }, 10000
                     );
-                }).done(function(data){
-
-         });
+                });
+        },1000);
 
     });
 

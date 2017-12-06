@@ -7,6 +7,7 @@ import urllib3
 import certifi
 import json
 import time
+import numpy
 
 bot_module = Blueprint('bot', __name__, url_prefix='/bot')
 
@@ -230,9 +231,9 @@ def percent_change(market, buy_level, sell_level):
 
     # Get current U.S. Dollar value for bitcoin
 
-    result = bit.get_ticker('USDT-' + request.args.get('market'))
+    result = bit.get_ticker(market)
     latest_price = format(result['result']['Last'], '.2f')
-    initialUSPrice = round(latest_price, 2)
+    initialUSPrice = round(float(latest_price), 2)
 
     print("Initial Bitcoin Price: ", initialUSPrice)
 
@@ -240,13 +241,12 @@ def percent_change(market, buy_level, sell_level):
     cashInWallet = current_user.wallet.usd_balance
     bitcoin = current_user.wallet.btc_balance
 
-    print("Loop #:", x)
 
     # Take quick break to see if price changed
     time.sleep(5)
 
     # Grab current BTC US dollar price to see if it's changed
-    result = bit.get_ticker('BTC-' + request.args.get('market'))
+    result = bit.get_ticker('BTC-USDT')
     latest_price = format(result['result']['Last'], '.2f')
     btc_price_json = get_current_price('USD')
     btc_price = btc_price_json['bpi']['USD']['rate_float']
