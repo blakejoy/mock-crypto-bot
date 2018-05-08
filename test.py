@@ -4,7 +4,7 @@ import sys, getopt
 
 from bittrex import Bittrex
 
-bit = Bittrex('e5b05612e299400ba26405c25549bbad','b3d4526a91fd4e81bb904ce6b6f4beae')
+bit = Bittrex('','')
 
 def main(argv):
     period = 5
