@@ -219,6 +219,10 @@ def percent_change(market, buy_level, sell_level):
     # Risk (high 90 %, med 40 %, low 10 %)
     risk = .9
 
+    buy_level = int(buy_level)/100
+    sell_level = int(sell_level)/100
+
+
     # Create crypto currency wallet to store in json
     print('Wallet contains: NAME-', current_user.name, 'CASH-', cashInWallet, 'Bitcoin-', bitcoin)
     print()
@@ -237,11 +241,9 @@ def percent_change(market, buy_level, sell_level):
     bitcoin = current_user.wallet.btc_balance
 
 
-    # Take quick break to see if price changed
-    time.sleep(5)
 
     # Grab current BTC US dollar price to see if it's changed
-    result = bit.get_ticker('BTC-USDT')
+    result = bit.get_ticker(market)
     latest_price = format(result['result']['Last'], '.2f')
     btc_price_json = get_current_price('USD')
     btc_price = btc_price_json['bpi']['USD']['rate_float']
@@ -276,7 +278,7 @@ def percent_change(market, buy_level, sell_level):
         print('We can trade', current_user.wallet.btc_balance, 'bitcoins for', coins2DollarsAmount, 'dollars')
 
         # Update Wallet with new amount
-        cashInWallet += coins2DollarsAmount
+        current_user.wallet.usd_balance += coins2DollarsAmount
         current_user.wallet.btc_balance = 0
 
         # Set new Initial price value for U.S. Dollar value for bitcoin
@@ -302,8 +304,8 @@ def percent_change(market, buy_level, sell_level):
         print('We can trade', cashInWallet / 4, 'dollars for', bitcoinAmount / 4, 'bitcoins')
 
         # Update Wallet with new amount
-        cashInWallet /= 4
-        current_user.wallet.btc_balance += usd2btc(cashInWallet / 4, btc_ask_price)
+        current_user.wallet.usd_balance = 0
+        current_user.wallet.btc_balance += bitcoinAmount
 
         # Set new Initial price value for U.S. Dollar value for bitcoin
         initialUSPrice_json = get_current_price('USD')
@@ -312,5 +314,4 @@ def percent_change(market, buy_level, sell_level):
         print('New wallet amount:', 'CASH-', cashInWallet, 'Bitcoin', current_user.wallet.btc_balance)
         print()
 
-    final_portfolio_value = cashInWallet + btc2usd(bitcoin, get_current_price('USD'))
-    return {'Cash': cashInWallet, 'BTC': bitcoin, 'Total Value(in USD)': final_portfolio_value}
+    return {'Cash': cashInWallet, 'BTC': bitcoin}
