@@ -3,27 +3,4 @@
 This README would normally document whatever steps are necessary to get your application up and running.
 
 ### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+This is a mockup of a crypto currency trading bot. This project consisted of a group of 4 people. My role during the project was to develop the backend. The project uses Python and Flask in order to demonstrate how one would use a bot to trade crypto. I had no prior experience with trading indicators and such so the code for the indicators may be a little messy.
